@@ -3,8 +3,9 @@ import scala.io.StdIn.readLine
 
 class Menu {
 
+  val myMaps = new Maps()
 
-  def showMenu()={
+  def showMenu():Unit={
     println("- - - - - - - -  MENU - - - - - - - - ")
     println("Izaberite jednu od ponudjenih opcija:")
     println("1. Učitavanje mape terena iz fajla")
@@ -18,18 +19,28 @@ class Menu {
     println("Izabrai ste komandu " + command)
 
     command match {
-      case 1 => println(readMapFromFile())
+      case 1 => readMapFromFile
       case _ => println("Ponovite unos")
     }
+
+    showMenu
   }
 
-  def readMapFromFile():List[List[Char]]={
-    //TODO: add option to insert path for new file
-    val filename = "D:\\Marta SI\\Master\\FP\\Bloxorz_Scala\\BloxorzProj\\src\\main\\maps\\map1.txt"
-    var strList = ""
-    for (line <- Source.fromFile(filename).getLines) strList = strList + line.mkString + "\n"
 
-    //Split map to matrix of Lits
-    List(strList.toString().split("\n").map(str => List(str: _*)): _*)
+  def readMapFromFile()={
+    //TODO: add option to insert path for new file
+    println("Unesite ime fajla: ")
+    val fileName = readLine.toString
+
+    // Path is alerady defined with the folder maps
+    val filePath = "D:\\Marta SI\\Master\\FP\\Bloxorz_Scala\\BloxorzProj\\src\\main\\maps\\"+fileName+".txt"
+
+    //Reade file and load into strList variable
+    var strList = ""
+    for (line <- Source.fromFile(filePath).getLines) strList = strList + line.mkString + "\n"
+
+
+    myMaps.addMap(fileName, strList.toString() )
+    myMaps.listOfAvailMaps()
   }
 }
