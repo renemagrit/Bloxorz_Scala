@@ -18,15 +18,18 @@ class Menu {
     println("Izabrai ste komandu " + command)
 
     command match {
-      case 1 => loadMapFromFile()
+      case 1 => println(readMapFromFile())
       case _ => println("Ponovite unos")
     }
   }
 
-  def loadMapFromFile()={
+  def readMapFromFile():List[List[Char]]={
+    //TODO: add option to insert path for new file
     val filename = "D:\\Marta SI\\Master\\FP\\Bloxorz_Scala\\BloxorzProj\\src\\main\\maps\\map1.txt"
-    for (line <- Source.fromFile(filename).getLines) {
-      println(line)
-    }
+    var strList = ""
+    for (line <- Source.fromFile(filename).getLines) strList = strList + line.mkString + "\n"
+
+    //Split map to matrix of Lits
+    List(strList.toString().split("\n").map(str => List(str: _*)): _*)
   }
 }
