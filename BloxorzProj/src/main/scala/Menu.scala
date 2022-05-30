@@ -25,6 +25,7 @@ class Menu {
 
     command match {
       case 1 => readMapFromFile
+
       case _ => println("Ponovite unos")
     }
 
@@ -51,6 +52,7 @@ class Menu {
       //Add loaded map to the list of available maps
       myMaps.addMap(fileName, strList.toString())
       myMaps.listOfAvailMaps()
+      new Game(myMaps,"map1").gameCall()
     }
   }
 }
