@@ -8,6 +8,7 @@ import scala.io.StdIn.readLine
 class Menu {
 
   val myMaps = new Maps()
+  var myGame = new Game()
 
   //@tailrec
   def showMenu():Unit={
@@ -25,6 +26,8 @@ class Menu {
 
     command match {
       case 1 => readMapFromFile
+      case 2 => startGame
+      case 3 => manualPlayGame
 
       case _ => println("Ponovite unos")
     }
@@ -51,8 +54,24 @@ class Menu {
 
       //Add loaded map to the list of available maps
       myMaps.addMap(fileName, strList.toString())
-      myMaps.listOfAvailMaps()
-      new Game(myMaps,"map1").gameCall()
+
     }
+  }
+
+  def startGame() ={
+    if(myMaps.isListOfAvailableMapsEmpty) println("Lista dostupnh mapa je prazna. Molimo unesite mapu!")
+    else {
+      println("Unesite ime mape: ")
+      myMaps.listOfAvailableMapNames()
+      val mapName = readLine.toString
+      myGame.myMap = myMaps
+      myGame.myMapName = mapName
+      myGame.gameCall
+    }
+  }
+  def manualPlayGame() ={
+    println("Unesite potez: ")
+    val potez = readLine.toString
+    myGame.manualPlay(potez)
   }
 }

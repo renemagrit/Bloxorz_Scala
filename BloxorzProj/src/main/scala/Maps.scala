@@ -23,7 +23,17 @@ class Maps {
     }
   }
 
+  def listOfAvailableMapNames()= for((e, i) <- availMaps.keys.zipWithIndex) println((i + 1) + ". " + e)
 
+  def isListOfAvailableMapsEmpty():Boolean = availMaps.isEmpty
 
+  def findCharacterPosition(sign: Char, map: List[List[Char]]): Position ={
+
+    var pos = new Position(-1, -1)
+    for((e, y) <- map.zipWithIndex){
+      for((k, x) <- map(y).zipWithIndex if map(y)(x) == sign) pos = new Position(x, y)
+    }
+    pos
+  }
 
 }

@@ -1,9 +1,10 @@
-class Game(map: Maps, mapName: String) {
+class Game() {
 
-  val myMap = new Maps()
-  val myMapName = mapName
+  var myMap = new Maps()
+  var myMapName = ""
 
-  val startPos = new Position(2,1)
+  var startPos = new Position(-1,-1)
+  var stopPos = new Position(-1,-1)
 
   var myBlock = new Block(startPos, startPos)
 
@@ -16,11 +17,14 @@ class Game(map: Maps, mapName: String) {
     else true
   }
 
+  def isEnd:Boolean = myBlock.p1 == stopPos && myBlock.p2 == stopPos
+
   def checkBlock(myBlock: Block, map: List[List[Char]]):Boolean = {
     isPositionValidOnMap(myBlock.p1, map) && isPositionValidOnMap(myBlock.p2, map)
   }
+
   def printGame(block: Block)={
-    var mapList = map.convMapToList(myMapName)
+    var mapList = myMap.convMapToList(myMapName)
     for((line,j) <- mapList.zipWithIndex){
       for((e, i) <- line.zipWithIndex){
         if((block.p1.x == i &&  block.p1.y == j) || (block.p2.x == i && block.p2.y == j)) print("$")
@@ -30,21 +34,38 @@ class Game(map: Maps, mapName: String) {
     }
     println()
   }
-  def gameCall(): Unit ={
-    println("GAME CALL")
 
-    println(checkBlock(myBlock, map.convMapToList(myMapName)))
-    println(checkBlock(myBlock.rollLeft(), map.convMapToList(myMapName)))
-    println(checkBlock(myBlock.rollRigth(), map.convMapToList(myMapName)))
-    println(checkBlock(myBlock.rollUp(), map.convMapToList(myMapName)))
-    println(checkBlock(myBlock.rollDown(), map.convMapToList(myMapName)))
+  def gameCall={
+    println("* * * GAME STARTED * * *")
+    startPos = myMap.findCharacterPosition('S', myMap.convMapToList(myMapName))
+    stopPos = myMap.findCharacterPosition('T', myMap.convMapToList(myMapName))
+    myBlock = new Block(startPos, startPos)
 
     printGame(myBlock)
-    printGame(myBlock.rollDown())
-    myBlock = myBlock.rollDown()
-    printGame(myBlock.rollRigth())
-    myBlock = myBlock.rollRigth()
-    printGame(myBlock.rollUp())
+  }
+
+  def manualPlay(command: String): Unit ={
+    var tempBLock = myBlock
+    command match {
+      case "d" => tempBLock = myBlock.rollDown()
+      case "u" => tempBLock = myBlock.rollUp()
+      case "l" => tempBLock = myBlock.rollLeft()
+      case "r" => tempBLock = myBlock.rollRigth()
+
+      case _ => println("Ponovite unos")
+
+    }
+
+    if(checkBlock(tempBLock, myMap.convMapToList(myMapName)))
+    {
+      myBlock =  tempBLock
+      printGame(myBlock)
+      if(myBlock.p1 == stopPos && myBlock.p2 == stopPos) println("You win! ")
+
+    }else println("Game Over :(")
+    println(myBlock.p1.x + " " + myBlock.p1.y)
+    println(myBlock.p2.x + " " + myBlock.p2.y)
+    println(stopPos.x + " "+ stopPos.y)
   }
 
 }
