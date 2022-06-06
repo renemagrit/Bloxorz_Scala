@@ -7,6 +7,7 @@ class Game() {
   var stopPos = new Position(-1,-1)
 
   var myBlock = new Block(startPos, startPos)
+  var gameFinish = true
 
   def isPositionValidOnMap(pos: Position, map: List[List[Char]]):Boolean = {
 
@@ -16,6 +17,7 @@ class Game() {
     else if (map(pos.y)(pos.x) == '-') false
     else true
   }
+  def isEqualPos (p1:Position, p2:Position):Boolean=(p1.x == p2.x) && (p1.y == p2.y)
 
   def isEnd:Boolean = myBlock.p1 == stopPos && myBlock.p2 == stopPos
 
@@ -40,11 +42,15 @@ class Game() {
     startPos = myMap.findCharacterPosition('S', myMap.convMapToList(myMapName))
     stopPos = myMap.findCharacterPosition('T', myMap.convMapToList(myMapName))
     myBlock = new Block(startPos, startPos)
+    gameFinish = false
 
     printGame(myBlock)
   }
 
-  def manualPlay(command: String): Unit ={
+  def manualPlay(command: String): Boolean ={
+
+    if(gameFinish) return false
+
     var tempBLock = myBlock
     command match {
       case "d" => tempBLock = myBlock.rollDown()
@@ -60,12 +66,18 @@ class Game() {
     {
       myBlock =  tempBLock
       printGame(myBlock)
-      if(myBlock.p1 == stopPos && myBlock.p2 == stopPos) println("You win! ")
+      if(isEqualPos(myBlock.p1 , stopPos) && isEqualPos(myBlock.p2,stopPos)){
+        gameFinish = true;
+        println("You win! ")
+      }
 
-    }else println("Game Over :(")
-    println(myBlock.p1.x + " " + myBlock.p1.y)
-    println(myBlock.p2.x + " " + myBlock.p2.y)
-    println(stopPos.x + " "+ stopPos.y)
+    }else{
+      gameFinish = true;
+      println("Game Over :(")
+
+    }
+    true
+
   }
 
 }

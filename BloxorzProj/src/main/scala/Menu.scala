@@ -28,6 +28,7 @@ class Menu {
       case 1 => readMapFromFile
       case 2 => startGame
       case 3 => manualPlayGame
+      case 4 => filePlayGame
 
       case _ => println("Ponovite unos")
     }
@@ -72,6 +73,25 @@ class Menu {
   def manualPlayGame() ={
     println("Unesite potez: ")
     val potez = readLine.toString
-    myGame.manualPlay(potez)
+    if(!myGame.manualPlay(potez))
+      println("Igra je završena. Započnite novu igru!")
+
+  }
+  def filePlayGame()={
+    println("Unesite ime fajla: ")
+    val fileName = readLine.toString
+
+    // Path is alerady defined with the folder maps
+    val filePath = "D:\\Marta SI\\Master\\FP\\Bloxorz_Scala\\BloxorzProj\\src\\main\\moves\\"+fileName+".txt"
+
+    //Check if file exists
+    if (!Files.exists(Paths.get(filePath))){
+      println("Uneto ime fajla ne postoji!")
+
+    }else {
+      //Reade file and load into strList variable
+      var strList = ""
+      for (line <- Source.fromFile(filePath).getLines if (!myGame.manualPlay(line))) println("Igra je gotova!")
+    }
   }
 }
