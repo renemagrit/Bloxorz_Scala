@@ -18,6 +18,7 @@ class Menu {
     println("2. Započni igru")
     println("3. Odigraj potez [d - dole, g - gore, l - levo, d - desno]")
     println("4. Odigraj sekvencu poteza iz fajla")
+    println("5. Kreiranje novih mapa")
     println("Unos: ")
 
     val command = readLine.toInt
@@ -29,6 +30,7 @@ class Menu {
       case 2 => startGame
       case 3 => manualPlayGame
       case 4 => filePlayGame
+      case 5 => updateMaps
 
       case _ => println("Ponovite unos")
     }
@@ -93,5 +95,15 @@ class Menu {
       var strList = ""
       for (line <- Source.fromFile(filePath).getLines if (!myGame.manualPlay(line))) println("Igra je gotova!")
     }
+  }
+  def updateMaps(): Unit ={
+    println("Unesite ime fajla: ")
+    val mapName = readLine.toString
+    println("Unesite x kordinaru: ")
+    val x = readLine.toInt
+    println("Unesite y kordinaru: ")
+    val y = readLine.toInt
+    if(!myMaps.isPositionValidOnMap(mapName, new Position(x, y))) return
+    myMaps.replaceCornerBlock(mapName, x, y)
   }
 }
