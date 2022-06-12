@@ -13,7 +13,7 @@ class Block(initP1: Position, initP2: Position){
     var p2 = initP2
 
     //isVertical = Block is standing Vertically, only on one filed
-    def isVertical: Boolean = (p1 == p2)
+    def isVertical: Boolean = (p1.x == p2.x) && (p1.y == p2.y)
 
     //isHorizonal = BLock is standing horizontally,on two fields
     def isHorizonal: Boolean = (p1.y == p2.y)

@@ -10,20 +10,21 @@ class Game() {
   var gameFinish = true
 
   def isPositionValidOnMap(pos: Position, map: List[List[Char]]):Boolean = {
-
     if ((pos.x < 0) || (pos.y < 0)) false
     else if (pos.x >= map(pos.x).length) false
     else if (pos.y >= map.length) false
     else if (map(pos.y)(pos.x) == '-') false
     else true
   }
+  def isPositionSpecial(myBlock: Block, map: List[List[Char]]): Boolean =
+    myBlock.isVertical && (map(myBlock.p1.y)(myBlock.p2.x) == '.')
+
   def isEqualPos (p1:Position, p2:Position):Boolean=(p1.x == p2.x) && (p1.y == p2.y)
 
-  def isEnd:Boolean = myBlock.p1 == stopPos && myBlock.p2 == stopPos
+  def isEnd(myBlock:Block, stopPos: Position):Boolean = isEqualPos(myBlock.p1 , stopPos) && isEqualPos(myBlock.p2,stopPos)
 
-  def checkBlock(myBlock: Block, map: List[List[Char]]):Boolean = {
+  def checkBlock(myBlock: Block, map: List[List[Char]]):Boolean =
     isPositionValidOnMap(myBlock.p1, map) && isPositionValidOnMap(myBlock.p2, map)
-  }
 
   def printGame(block: Block)={
     var mapList = myMap.convMapToList(myMapName)
@@ -66,9 +67,13 @@ class Game() {
     {
       myBlock =  tempBLock
       printGame(myBlock)
-      if(isEqualPos(myBlock.p1 , stopPos) && isEqualPos(myBlock.p2,stopPos)){
+      if(isEnd(myBlock, stopPos)){
         gameFinish = true;
         println("You win! ")
+      }
+      if( isPositionSpecial(myBlock, myMap.convMapToList(myMapName))) {
+        gameFinish = true;
+        println("Game Over :(")
       }
 
     }else{

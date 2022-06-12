@@ -40,7 +40,7 @@ class Maps {
   //************* HELPER FUNCTIONS *******************************************
 
   def isPositionValidOnMap(mapName: String ,pos: Position):Boolean = {
-      val map = convMapToList(mapName)
+    val map = convMapToList(mapName)
     if ((pos.x < 0) || (pos.y < 0)) false
     else if (pos.x >= map(pos.x).length) false
     else if (pos.y >= map.length) false
@@ -48,18 +48,21 @@ class Maps {
   }
 
   def replaceSignInMap(mapName: String,sign:Char, x: Int, y:Int): List[String] ={
-      val newMap = convMapToList(mapName)
+    val newMap = convMapToList(mapName)
     for((e,i) <- newMap.zipWithIndex) yield
       if(i == y) e.patch(x, Seq(sign), 1).mkString.appended('\n') else e.mkString.appended('\n')
   }
+  //0.REQ: Update Map with the latest map value
+  def mapValueUpdate(mapName: String, mapValue:String) = {
+    availMaps = availMaps + (mapName -> mapValue)
+  }
+
 
   //1.REQ: Remove corner block
-  def replaceCornerBlock(name: String, x: Int, y: Int) = {
-    availMaps = availMaps + (name.toString -> replaceSignInMap(name, '-', x, y).flatten.toList.mkString)
+  def replaceCornerBlock(name: String, x: Int, y: Int):String = replaceSignInMap(name, '-', x, y).flatten.toList.mkString
 
-  }
   //2.REQ: Add corner block
-  def addCornerBlock(name: String, x: Int, y: Int) = {
-    availMaps = availMaps + (name.toString -> replaceSignInMap(name, 'o', x, y).flatten.toList.mkString)
-  }
+  def addCornerBlock(name: String, x: Int, y: Int):String = replaceSignInMap(name, 'o', x, y).flatten.toList.mkString
+
+  //3.REQ: Add special block
 }
