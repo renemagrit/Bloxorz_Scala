@@ -29,7 +29,6 @@ class Maps {
   def isListOfAvailableMapsEmpty():Boolean = availMaps.isEmpty
 
   def findCharacterPosition(sign: Char, map: List[List[Char]]): Position ={
-
     var pos = new Position(-1, -1)
     for((e, y) <- map.zipWithIndex){
       for((k, x) <- map(y).zipWithIndex if map(y)(x) == sign) pos = new Position(x, y)
@@ -56,7 +55,6 @@ class Maps {
   def mapValueUpdate(mapName: String, mapValue:String) = {
     availMaps = availMaps + (mapName -> mapValue)
   }
-
 
   //1.REQ: Remove corner block
   def replaceCornerBlock(name: String, x: Int, y: Int):String = replaceSignInMap(name, '-', x, y).flatten.toList.mkString

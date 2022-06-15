@@ -31,6 +31,7 @@ class Menu {
       case 3 => manualPlayGame
       case 4 => filePlayGame
       case 5 => updateMaps
+      case 6 => solverPlayGame
 
       case _ => println("Ponovite unos")
     }
@@ -75,7 +76,7 @@ class Menu {
   def manualPlayGame() ={
     println("Unesite potez: ")
     val potez = readLine.toString
-    if(!myGame.manualPlay(potez))
+    if(!myGame.manualPlayGame(potez))
       println("Igra je završena. Započnite novu igru!")
 
   }
@@ -93,7 +94,7 @@ class Menu {
     }else {
       //Reade file and load into strList variable
       var strList = ""
-      for (line <- Source.fromFile(filePath).getLines if (!myGame.manualPlay(line))) println("Igra je gotova!")
+      for (line <- Source.fromFile(filePath).getLines if (!myGame.manualPlayGame(line))) println("Igra je gotova!")
     }
   }
   def updateMaps(): Unit ={
@@ -105,5 +106,9 @@ class Menu {
     val y = readLine.toInt
     if(!myMaps.isPositionValidOnMap(mapName, new Position(x, y))) return
     myMaps.replaceCornerBlock(mapName, x, y)
+  }
+
+  def solverPlayGame()={
+    myGame.solverPlayGame
   }
 }
