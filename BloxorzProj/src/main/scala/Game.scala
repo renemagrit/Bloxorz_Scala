@@ -11,10 +11,14 @@ class Game() {
   /** Block Helper Functions*/
   //1. REQ: Valid block position on the MAP without special block sign
   def isPositionValidOnMap(pos: Position, map: List[List[Char]]):Boolean = {
-    if ((pos.x < 0) || (pos.y < 0)) false
-    else if (pos.x >= map(pos.x).length) false
-    else if (pos.y >= map.length) false
-    else if (map(pos.y)(pos.x) == '-') false
+    println("/////////")
+    println(pos.x+" "+pos.y +" "+ map(0).length +" " + map.length)
+
+    if (pos.x < 0)  false
+    else if(pos.y < 0) false
+    else if (pos.x > map(0).length) false
+    else if (pos.y > map.length) false
+    else if (map(pos.y)(pos.x) == '–') false
     else if (map(pos.y)(pos.x) == '.') false
     else true
   }
@@ -23,9 +27,11 @@ class Game() {
   def isEqualPos (p1:Position, p2:Position):Boolean=(p1.x == p2.x) && (p1.y == p2.y)
 
   //4. RQE: Check if the block position on the map is valid
-  def checkBlock(myBlock: Block, map: List[List[Char]]):Boolean =
-    isPositionValidOnMap(myBlock.p1, map) && isPositionValidOnMap(myBlock.p2, map)
-
+  def checkBlock(myBlock: Block, map: List[List[Char]]):Boolean = {
+    val s1 = isPositionValidOnMap(myBlock.p1, map)
+    val s2 = isPositionValidOnMap(myBlock.p2, map)
+    (s1 && s2)
+  }
 
 
   /** Game helper functions*/
@@ -108,7 +114,7 @@ class Game() {
 
 
   def myContain(blck: Block, explored: Set[Block]): Boolean ={
-    for(e <- explored ) if (isEqualPos(e.p2, blck.p2) && isEqualPos(e.p2, blck.p2)) return true
+    for(e <- explored ) if (isEqualPos(e.p2, blck.p2) && isEqualPos(e.p1, blck.p1)) return true
     false
   }
 
@@ -122,6 +128,7 @@ class Game() {
   def from(initial: List[(Block, List[Move])], explored: Set[Block]): List[(Block, List[Move])] =
     if (initial.isEmpty) List.empty
     else {
+      val s = initial.head._1
       val neighbors = neighborsWithHistory(validBlockNeighbours(initial.head._1,myMap.convMapToList(myMapName)), initial.head._2)
       val neighborsNew = newNeighborsOnly(neighbors, explored)
       val expl = explored ++ (neighborsNew map(_._1))
@@ -132,7 +139,10 @@ class Game() {
   //lazy val pathsFromStart: List[(Block, List[Move])] = from(List((myBlock, List())), Set(myBlock))
   /**Solver play Game*/
   def solverPlayGame()={
-    println(from(List((myBlock, List())), Set(myBlock)))
-    val a = 1
+    println(startPos.x + " "+ startPos.y)
+    println(stopPos.x + " "+ stopPos.y)
+    println("-------------")
+    val a = from(List((myBlock, List())), Set(myBlock))
+    //for((e, m) <- a )println(e.p1.x + "," + e.p1.y +" "+e.p2.x + "," + e.p2.y )
   }
 }

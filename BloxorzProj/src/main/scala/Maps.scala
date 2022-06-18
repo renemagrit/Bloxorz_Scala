@@ -12,7 +12,7 @@ class Maps {
 
   //Get the map with defined name, and return Matrix of fields
   def convMapToList(name: String): List[List[Char]] = {
-    val mapValue = availMaps.get(name)
+    val mapValue= availMaps.get(name).get
     List(mapValue.toString().split("\n").map(str => List(str: _*)): _*)
   }
 
