@@ -11,13 +11,10 @@ class Game() {
   /** Block Helper Functions*/
   //1. REQ: Valid block position on the MAP without special block sign
   def isPositionValidOnMap(pos: Position, map: List[List[Char]]):Boolean = {
-    println("/////////")
-    println(pos.x+" "+pos.y +" "+ map(0).length +" " + map.length)
-
-    if (pos.x < 0)  false
+    if (pos.x < 0) false
     else if(pos.y < 0) false
-    else if (pos.x > map(0).length) false
-    else if (pos.y > map.length) false
+    else if (pos.x >= map.head.length) false
+    else if (pos.y >= map.length) false
     else if (map(pos.y)(pos.x) == '–') false
     else if (map(pos.y)(pos.x) == '.') false
     else true
@@ -143,6 +140,6 @@ class Game() {
     println(stopPos.x + " "+ stopPos.y)
     println("-------------")
     val a = from(List((myBlock, List())), Set(myBlock))
-    //for((e, m) <- a )println(e.p1.x + "," + e.p1.y +" "+e.p2.x + "," + e.p2.y )
+    for((e, m) <- a if (isEqualPos(e.p1, stopPos) && isEqualPos(e.p2, stopPos)))println(m)
   }
 }
