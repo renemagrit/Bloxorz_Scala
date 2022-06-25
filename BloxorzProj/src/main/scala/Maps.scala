@@ -34,7 +34,12 @@ class Maps {
     }
     pos
   }
-
+  def findAllCharacterPosition(sign: Char, map: List[List[Char]]): List[Position] ={
+    var pos = new Position(-1, -1)
+    val lstOfPos = for((e, y) <- map.zipWithIndex)
+     yield (for((k, x) <- map(y).zipWithIndex if map(y)(x) == sign) yield (new Position(x, y)))
+    lstOfPos.flatten
+  }
 
   //************* HELPER FUNCTIONS *******************************************
 
@@ -81,5 +86,20 @@ class Maps {
     val stopPos = findCharacterPosition('T', convStringMapToList(mapValue))
     val temp = replaceSignInMap(mapValue, 'o', stopPos.x, stopPos.y)
     replaceSignInMap(temp, 'T', x, y)
+  }
+  //7. REQ: Map inversion
+  def mapInversion(mapValue: String): String={
+    val startPos = findCharacterPosition('S', convStringMapToList(mapValue))
+    val stopPos = findCharacterPosition('T', convStringMapToList(mapValue))
+    val temp = replaceSignInMap(mapValue, 'S', stopPos.x, stopPos.y)
+    replaceSignInMap(temp, 'T', startPos.x, startPos.y)
+  }
+
+  //8.REQ: MapSpecialBlockExchange
+  def mapSpecialBlockExchange(mapValue: String):String={
+    val listOfPos = findAllCharacterPosition('.', convStringMapToList(mapValue))
+    var temp = mapValue
+    for(l <- listOfPos) {temp = removeSpecialBlock(temp, l.x, l.y)}
+    temp
   }
 }

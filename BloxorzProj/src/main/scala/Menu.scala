@@ -109,6 +109,8 @@ class Menu {
         case 4 => myMaps.removeSpecialBlock(mapValue, x, y)
         case 5 => myMaps.updateStartBlock(mapValue, x, y)
         case 6 => myMaps.updateEndBlock(mapValue, x, y)
+        case 7 => myMaps.mapInversion(mapValue)
+        case 8 => myMaps.mapSpecialBlockExchange(mapValue)
         case _ => mapValue                                      //Input error
       }
 
@@ -126,6 +128,8 @@ class Menu {
     println("4. Zamena specijalne ploce obicnom")
     println("5. Posavljanje nove Startne pozicije")
     println("6. Posavljanje nove Ciljne pozicije")
+    println("7. Inverzija Mape")
+    println("8. Ssjsjsjsjsj")
     println("Unos: <Opcija>(x,y)")
 
     val Pattern = """\d\(\d,\d\)""".r
