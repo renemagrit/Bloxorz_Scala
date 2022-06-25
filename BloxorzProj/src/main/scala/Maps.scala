@@ -9,12 +9,11 @@ class Maps {
   def addMap(name: String, mapValue: String) ={
     availMaps = availMaps ++ Map(name -> mapValue)
   }
+  def getMapByName(name: String): String = availMaps.get(name).get
 
   //Get the map with defined name, and return Matrix of fields
-  def convMapToList(name: String): List[List[Char]] = {
-    val mapValue= availMaps.get(name).get
-    List(mapValue.toString().split("\n").map(str => List(str: _*)): _*)
-  }
+  def convMapToList(name: String): List[List[Char]] = List(getMapByName(name).toString().split("\n").map(str => List(str: _*)): _*)
+  def convStringMapToList(mapValue: String): List[List[Char]] = List(mapValue.toString().split("\n").map(str => List(str: _*)): _*)
 
   //Print all maps with their names
   def listOfAvailMaps()={
@@ -36,20 +35,22 @@ class Maps {
     pos
   }
 
+
   //************* HELPER FUNCTIONS *******************************************
 
-  def isPositionValidOnMap(mapName: String ,pos: Position):Boolean = {
-    val map = convMapToList(mapName)
+  def isPositionValidOnMap(mapValue: String ,pos: Position):Boolean = {
+    val map = convStringMapToList(mapValue)
     if ((pos.x < 0) || (pos.y < 0)) false
     else if (pos.x >= map(pos.x).length) false
     else if (pos.y >= map.length) false
     else true
   }
 
-  def replaceSignInMap(mapName: String,sign:Char, x: Int, y:Int): List[String] ={
-    val newMap = convMapToList(mapName)
-    for((e,i) <- newMap.zipWithIndex) yield
+  def replaceSignInMap(mapValue: String,sign:Char, x: Int, y:Int): String={
+    val newMap = List(mapValue.toString().split("\n").map(str => List(str: _*)): _*)
+    val map = for((e,i) <- newMap.zipWithIndex) yield
       if(i == y) e.patch(x, Seq(sign), 1).mkString.appended('\n') else e.mkString.appended('\n')
+    map.flatten.toList.mkString
   }
   //0.REQ: Update Map with the latest map value
   def mapValueUpdate(mapName: String, mapValue:String) = {
@@ -57,10 +58,28 @@ class Maps {
   }
 
   //1.REQ: Remove corner block
-  def replaceCornerBlock(name: String, x: Int, y: Int):String = replaceSignInMap(name, '-', x, y).flatten.toList.mkString
+  def replaceCornerBlock(mapValue: String, x: Int, y: Int):String = replaceSignInMap(mapValue, '-', x, y)
 
   //2.REQ: Add corner block
-  def addCornerBlock(name: String, x: Int, y: Int):String = replaceSignInMap(name, 'o', x, y).flatten.toList.mkString
+  def addCornerBlock(mapValue: String, x: Int, y: Int):String = replaceSignInMap(mapValue, 'o', x, y)
 
   //3.REQ: Add special block
+  def addSpecialBlock(mapValue: String, x: Int, y: Int):String = replaceSignInMap(mapValue, '.', x, y)
+
+  //4.REQ: Remove special block
+  def removeSpecialBlock(mapValue: String, x: Int, y: Int):String = replaceSignInMap(mapValue, 'o', x, y)
+
+  //5.REQ: Start position change
+  def updateStartBlock(mapValue: String, x:Int, y: Int):String = {
+    val startPos = findCharacterPosition('S', convStringMapToList(mapValue))
+    val temp = replaceSignInMap(mapValue, 'o', startPos.x, startPos.y)
+    replaceSignInMap(temp, 'S', x, y)
+  }
+
+  //6.REQ: End position change
+  def updateEndBlock(mapValue: String, x:Int, y: Int):String = {
+    val stopPos = findCharacterPosition('T', convStringMapToList(mapValue))
+    val temp = replaceSignInMap(mapValue, 'o', stopPos.x, stopPos.y)
+    replaceSignInMap(temp, 'T', x, y)
+  }
 }

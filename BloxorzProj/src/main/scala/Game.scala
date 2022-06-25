@@ -136,9 +136,6 @@ class Game() {
   //lazy val pathsFromStart: List[(Block, List[Move])] = from(List((myBlock, List())), Set(myBlock))
   /**Solver play Game*/
   def solverPlayGame()={
-    println(startPos.x + " "+ startPos.y)
-    println(stopPos.x + " "+ stopPos.y)
-    println("-------------")
     val a = from(List((myBlock, List())), Set(myBlock))
     for((e, m) <- a if (isEqualPos(e.p1, stopPos) && isEqualPos(e.p2, stopPos)))println(m)
   }

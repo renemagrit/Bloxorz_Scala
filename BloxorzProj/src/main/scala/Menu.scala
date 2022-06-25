@@ -1,9 +1,9 @@
 
 import java.nio.file.Files
 import java.nio.file.Paths
-
 import scala.io.Source
 import scala.io.StdIn.readLine
+import scala.util.matching.Regex
 
 class Menu {
 
@@ -97,15 +97,48 @@ class Menu {
       for (line <- Source.fromFile(filePath).getLines if (!myGame.manualPlayGame(line))) println("Igra je gotova!")
     }
   }
+
+
+  def updateMapFncs(mapValue:String, command: Int, x: Int, y:Int):String = {
+    if(!myMaps.isPositionValidOnMap(mapValue, new Position(x, y))) return mapValue
+
+    command match {
+        case 1 => myMaps.replaceCornerBlock(mapValue, x, y)
+        case 2 => myMaps.addCornerBlock(mapValue, x, y)
+        case 3 => myMaps.addSpecialBlock(mapValue, x, y)
+        case 4 => myMaps.removeSpecialBlock(mapValue, x, y)
+        case 5 => myMaps.updateStartBlock(mapValue, x, y)
+        case 6 => myMaps.updateEndBlock(mapValue, x, y)
+        case _ => mapValue                                      //Input error
+      }
+
+  }
+
   def updateMaps(): Unit ={
     println("Unesite ime fajla: ")
     val mapName = readLine.toString
-    println("Unesite x kordinaru: ")
-    val x = readLine.toInt
-    println("Unesite y kordinaru: ")
-    val y = readLine.toInt
-    if(!myMaps.isPositionValidOnMap(mapName, new Position(x, y))) return
-    myMaps.replaceCornerBlock(mapName, x, y)
+
+    println("- - - - - - - SUB MENU - - - - - - - ")
+    println("Izaberite Opciju:")
+    println("1. Ukloni plocu sa ivice terena")
+    println("2. Dodaj plocu na ivicu terena")
+    println("3. Zamena obicne ploce specijalnom")
+    println("4. Zamena specijalne ploce obicnom")
+    println("5. Posavljanje nove Startne pozicije")
+    println("6. Posavljanje nove Ciljne pozicije")
+    println("Unos: <Opcija>(x,y)")
+
+    val Pattern = """\d\(\d,\d\)""".r
+    val lines = Iterator.continually(io.StdIn.readLine).takeWhile(Option(_).fold(false)(_.nonEmpty)).
+      toList.filter{ fi => Pattern.findFirstIn(fi).isDefined}
+
+    var myMap = myMaps.getMapByName(mapName)
+    for(l <-lines) {
+      val h = l.split("()")
+      myMap = updateMapFncs(myMap, h(0).toString.toInt, h(2).toString.toInt, h(4).toString.toInt)
+    }
+    println(myMap)
+    myMaps.mapValueUpdate(mapName, myMap)
   }
 
   def solverPlayGame()={
